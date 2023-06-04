@@ -1,4 +1,5 @@
 ﻿using EndoSoftAssignment.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ namespace EndoSoftAssignment.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpPost("CreateUser")]
         public IActionResult Create(User user)
         {
@@ -33,13 +35,20 @@ namespace EndoSoftAssignment.Controllers
             return Ok("Success");
         }
 
+        [AllowAnonymous]
         [HttpPost("LoginUser")]
         public IActionResult Login(Login user)
         {
             var checkValidUser = _userContext.Users.Where(x => x.Mobile == user.MobileNo && x.Password == user.Password).FirstOrDefault();
             if (checkValidUser != null)
             {
-                return Ok("Success");
+                return Ok(new JWTService(_configuration).GenerateJWTToken(
+                        checkValidUser.UserId.ToString(),
+                        checkValidUser.FirstName, 
+                        checkValidUser.LastName,
+                        checkValidUser.Address,
+                        checkValidUser.Mobile
+                    ));
             }
             return Ok("Failure");
         }
