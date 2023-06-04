@@ -45,9 +45,11 @@ namespace EndoSoftAssignment.Controllers
         }
 
         [HttpGet("UserList")]
-        public IEnumerable<User> GetUsers()
+        public JsonResult GetUsers()
         {
-            return _userContext.Users;
+            var userInfo = _userContext.Users.ToList();
+
+            return new JsonResult(userInfo);
         }
     }
 }
