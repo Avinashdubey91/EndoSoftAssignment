@@ -42,13 +42,14 @@ namespace EndoSoftAssignment.Controllers
             var checkValidUser = _userContext.Users.Where(x => x.Mobile == user.MobileNo && x.Password == user.Password).FirstOrDefault();
             if (checkValidUser != null)
             {
-                return Ok(new JWTService(_configuration).GenerateJWTToken(
-                        checkValidUser.UserId.ToString(),
-                        checkValidUser.FirstName, 
-                        checkValidUser.LastName,
-                        checkValidUser.Address,
-                        checkValidUser.Mobile
-                    ));
+                return Ok("Success");
+                //return Ok(new JWTService(_configuration).GenerateJWTToken(
+                //        checkValidUser.UserId.ToString(),
+                //        checkValidUser.FirstName, 
+                //        checkValidUser.LastName,
+                //        checkValidUser.Address,
+                //        checkValidUser.Mobile
+                //    ));
             }
             return Ok("Failure");
         }
